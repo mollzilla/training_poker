@@ -1,0 +1,971 @@
+/* Base theme */
+:root {
+  /* Main theme colors */
+  --primary: #00BCD4;  /* Bright cyan - Portal-like */
+  --secondary: #FF6B6B;  /* Retro coral */
+  --accent: #FFD93D;  /* Warm yellow */
+  --surface: #FFFFFF;
+  --surface-alt: #F0F7F8;
+  --text: #2C3E50;
+  --text-light: #95A5A6;
+  
+  /* Specific colors */
+  --success: #4CAF50;
+  --danger: #FF5252;
+  --warning: #FFA726;
+  
+  /* Portal-inspired accents */
+  --portal-blue: #4295F5;
+  --portal-orange: #FF9930;
+  
+  /* Retro diner colors */
+  --mint: #98FF98;
+  --cherry: #FF6B6B;
+  --vanilla: #FFF5E1;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surface: #1A1A1A;
+    --surface-alt: #2D2D2D;
+    --text: #ECEFF1;
+    --text-light: #B0BEC5;
+  }
+}
+
+/* Global styles */
+body {
+  background: var(--surface);
+  color: var(--text);
+  background-image: linear-gradient(
+    to bottom,
+    rgba(173, 216, 230, 0.4) 0%,    /* light sky blue */
+    rgba(255, 182, 193, 0.4) 30%,    /* light purple-pink */
+    rgba(255, 165, 0, 0.4) 70%,      /* orange */
+    rgba(255, 223, 186, 0.4) 100%    /* light yellow */
+  );
+  min-height: 100vh;
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+h1 {
+  font-family: 'Righteous', cursive;
+  font-size: 3.5rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: var(--surface);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--portal-blue) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 
+    2px 2px 0px rgba(255, 153, 48, 0.3),
+    -1px -1px 0px rgba(66, 149, 245, 0.3);
+  letter-spacing: 1px;
+}
+
+/* Container styles */
+.container {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Room styles */
+.room-container {
+  padding: 2.5rem;
+  background: var(--surface-alt);
+  border-radius: 16px;
+  box-shadow: 
+    0 0 0 1px rgba(0, 188, 212, 0.1),
+    0 8px 16px rgba(0, 0, 0, 0.1),
+    inset 0 0 32px rgba(0, 188, 212, 0.05);
+  margin-top: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.room-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(
+    90deg,
+    var(--portal-blue),
+    var(--primary) 50%,
+    var(--portal-orange)
+  );
+}
+
+.room-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid rgba(0, 188, 212, 0.1);
+}
+
+.room-header h2 {
+  font-family: 'Righteous', cursive;
+  color: var(--text);
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+/* User list styles */
+.users-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+/* User item styles */
+.user-item {
+  background: linear-gradient(180deg, 
+    #FFFFFF 0%, 
+    #F8F8F8 35%,
+    #F0F0F0 65%,
+    #E8E8E8 100%
+  );
+  border-radius: 24px;
+  padding: 2rem;
+  position: relative;
+  transition: all 0.3s ease;
+  border: 2px solid #DDD;
+  box-shadow: 
+    inset 0 0 0 2px #FFF,
+    inset 0 0 0 3px #DDD,
+    0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: visible; /* Changed to allow pseudo-elements to show outside */
+  margin-top: 1rem; /* Space for the chrome trim */
+}
+
+/* Chrome trim effect at the top */
+.user-item::before {
+  content: '';
+  position: absolute;
+  top: -10px; /* Moved up to create an overhang */
+  left: 10px;
+  right: 10px;
+  height: 16px;
+  background: linear-gradient(90deg, 
+    #BBB 0%, 
+    #EEE 10%, 
+    #DDD 20%,
+    #EEE 30%,
+    #DDD 40%,
+    #EEE 50%,
+    #DDD 60%,
+    #EEE 70%,
+    #DDD 80%,
+    #EEE 90%,
+    #BBB 100%
+  );
+  border-radius: 8px 8px 0 0;
+  box-shadow: 
+    inset 0 2px 2px rgba(255, 255, 255, 0.8),
+    0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Decorative knob */
+.user-item::after {
+  content: '';
+  position: absolute;
+  top: -20px;
+  right: 20px;
+  width: 36px;
+  height: 36px;
+  background: radial-gradient(
+    circle at center,
+    #EEE 0%,
+    #DDD 40%,
+    #CCC 60%,
+    #BBB 100%
+  );
+  border-radius: 50%;
+  border: 2px solid #BBB;
+  box-shadow: 
+    inset 0 2px 4px rgba(255, 255, 255, 0.8),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.2),
+    0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+/* Neon glow effect for voted state */
+.user-item.has-voted::after {
+  background: radial-gradient(
+    circle at center,
+    #98FF98 0%,
+    #50C878 40%,
+    #3CB371 60%,
+    #2E8B57 100%
+  );
+  border-color: #98FF98;
+  box-shadow: 
+    /* Inner glow */
+    inset 0 2px 4px rgba(152, 255, 152, 0.8),
+    inset 0 -2px 4px rgba(46, 139, 87, 0.4),
+    /* Outer neon glow */
+    0 0 10px rgba(152, 255, 152, 0.6),
+    0 0 20px rgba(152, 255, 152, 0.4),
+    0 0 30px rgba(152, 255, 152, 0.2);
+  animation: neonPulse 2s ease-in-out infinite;
+}
+
+@keyframes neonPulse {
+  0% {
+    box-shadow: 
+      inset 0 2px 4px rgba(152, 255, 152, 0.8),
+      inset 0 -2px 4px rgba(46, 139, 87, 0.4),
+      0 0 10px rgba(152, 255, 152, 0.6),
+      0 0 20px rgba(152, 255, 152, 0.4),
+      0 0 30px rgba(152, 255, 152, 0.2);
+  }
+  50% {
+    box-shadow: 
+      inset 0 2px 4px rgba(152, 255, 152, 0.8),
+      inset 0 -2px 4px rgba(46, 139, 87, 0.4),
+      0 0 15px rgba(152, 255, 152, 0.7),
+      0 0 25px rgba(152, 255, 152, 0.5),
+      0 0 35px rgba(152, 255, 152, 0.3);
+  }
+  100% {
+    box-shadow: 
+      inset 0 2px 4px rgba(152, 255, 152, 0.8),
+      inset 0 -2px 4px rgba(46, 139, 87, 0.4),
+      0 0 10px rgba(152, 255, 152, 0.6),
+      0 0 20px rgba(152, 255, 152, 0.4),
+      0 0 30px rgba(152, 255, 152, 0.2);
+  }
+}
+
+/* Control panel dots */
+.user-item > span::after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  display: flex;
+  gap: 8px;
+  height: 8px;
+  width: 8px;
+  background: var(--portal-orange);
+  border-radius: 50%;
+  box-shadow: 
+    16px 0 0 var(--portal-blue),
+    32px 0 0 var(--primary);
+}
+
+/* User name display panel */
+.user-item > span {
+  display: block;
+  margin: 0.5rem 0 1.5rem;
+  font-weight: 600;
+  color: var(--portal-blue);
+  font-size: 1.1rem;
+  text-align: left; /* Changed to left for retro feel */
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: 'Righteous', cursive;
+  position: relative;
+  padding: 1rem;
+  padding-left: 70px; /* Space for control dots */
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(248, 248, 248, 0.9) 100%
+  );
+  border: 1px solid #DDD;
+  border-radius: 8px;
+  box-shadow: 
+    inset 0 2px 4px rgba(255, 255, 255, 0.8),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.answer-display {
+  background: linear-gradient(180deg, 
+    #F0F0F0 0%, 
+    #E8E8E8 50%,
+    #E0E0E0 100%
+  );
+  padding: 1.5rem;
+  margin: 1rem 0.5rem;
+  position: relative;
+  color: var(--text);
+  font-family: "Courier New", monospace; /* Retro terminal feel */
+  font-weight: 800; /* Extra bold text */
+  line-height: 1.6;
+  border: none;
+  
+  /* Portal-inspired frame effect */
+  --frame-size: 4px;
+  --frame-color: #CCC;
+  
+  /* Complex border styling for retro-tech look */
+  background-clip: padding-box;
+  border: var(--frame-size) solid transparent;
+  border-radius: 12px;
+  
+  /* Inset panel effect */
+  box-shadow: 
+    /* Outer edge lighting */
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    /* Inner top highlight */
+    inset 0 2px 4px rgba(255, 255, 255, 0.8),
+    /* Inner shadow */
+    inset 0 -2px 4px rgba(0, 0, 0, 0.1);
+    
+  /* Prevent overflow */
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Decorative frame */
+.answer-display::before {
+  content: '';
+  position: absolute;
+  inset: calc(-1 * var(--frame-size));
+  background: linear-gradient(135deg,
+    var(--portal-blue) 0%,
+    var(--primary) 50%,
+    var(--portal-orange) 100%
+  );
+  opacity: 0.4; /* Reduced opacity for the frame */
+  border-radius: inherit;
+  z-index: -1;
+}
+
+/* Screen texture overlay */
+.answer-display::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    /* Scanlines */
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.03) 0px,
+      rgba(0, 0, 0, 0.03) 1px,
+      rgba(0, 0, 0, 0) 1px,
+      rgba(0, 0, 0, 0) 2px
+    ),
+    /* Noise texture */
+    url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyBAMAAADsEZWCAAAAGFBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAVfJ92AAAACHRSTlMAAgQGCgwODpj3wHQAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAAySURBVDjLY2AgErBAqf+UYqhjoCAwUeoZhkEtFClUqxXDIHSt5PuUOIpSpV5pFEXRwAAA6/sIf8vcza8AAAAASUVORK5CYII=');
+  opacity: 0.1;
+  pointer-events: none;
+  border-radius: inherit;
+  /* Subtle inner glow */
+  box-shadow: inset 0 0 20px rgba(66, 149, 245, 0.1);
+}
+
+/* Input styles */
+.answer-input-container {
+  background: var(--surface);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.05),
+    0 0 0 1px rgba(0, 188, 212, 0.1);
+  margin: 2rem 0;
+  width: 100%;
+  box-sizing: border-box;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.answer-input {
+  width: 100%;
+  max-width: 100%;
+  min-height: 120px;
+  padding: 1.5rem;
+  font-size: 1.1rem;
+  font-family: "Courier New", monospace;
+  border: 2px solid #DDD;
+  border-radius: 12px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(248, 248, 248, 0.95) 100%
+  );
+  color: var(--text);
+  resize: vertical;
+  transition: all 0.3s ease;
+  box-shadow: 
+    /* Outer shadow */
+    0 2px 4px rgba(0, 0, 0, 0.05),
+    /* Inner top light */
+    inset 0 2px 4px rgba(255, 255, 255, 0.8),
+    /* Inner shadow */
+    inset 0 -2px 4px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+  overflow: auto;
+  word-wrap: break-word;
+}
+
+.answer-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 
+    0 0 0 3px rgba(0, 188, 212, 0.2),
+    inset 0 2px 4px rgba(0, 188, 212, 0.1);
+  transform: translateY(-1px);
+}
+
+/* Character counter styling */
+.character-count {
+  font-family: "Courier New", monospace;
+  font-size: 0.875rem;
+  color: var(--text-light);
+  text-align: right;
+  margin-top: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.05) 0%,
+    rgba(0, 0, 0, 0.02) 100%
+  );
+  border-radius: 4px;
+  display: block;
+  margin-left: auto;
+  width: fit-content;
+}
+
+/* Button styles */
+.button {
+  padding: 0.8rem 1.5rem;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    180deg,
+    var(--primary) 0%,
+    darken(var(--primary), 10%) 100%
+  );
+}
+
+.submit-button, 
+.reveal-button,
+.new-round-button {
+  min-width: 160px;
+  min-height: 48px;
+  border: none;
+  border-radius: 24px;
+  font-family: 'Righteous', cursive;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  
+  /* Chrome-like trim */
+  box-shadow: 
+    /* Outer glow */
+    0 6px 12px rgba(0, 188, 212, 0.2),
+    /* Top highlight */
+    inset 0 2px 4px rgba(255, 255, 255, 0.3),
+    /* Bottom shadow */
+    inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+  
+  /* Gradient background */
+  background: linear-gradient(
+    180deg,
+    var(--primary) 0%,
+    darken(var(--primary), 15%) 100%
+  );
+  
+  /* Chrome trim top */
+  border-top: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Button hover effects */
+.submit-button:hover,
+.reveal-button:hover,
+.new-round-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 8px 16px rgba(0, 188, 212, 0.3),
+    inset 0 2px 4px rgba(255, 255, 255, 0.4),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Button active effects */
+.submit-button:active,
+.reveal-button:active,
+.new-round-button:active {
+  transform: translateY(1px);
+  box-shadow: 
+    0 2px 8px rgba(0, 188, 212, 0.2),
+    inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Button disabled state */
+.submit-button:disabled,
+.reveal-button:disabled,
+.new-round-button:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    inset 0 1px 2px rgba(255, 255, 255, 0.2);
+}
+
+/* Specific button colors */
+.reveal-button {
+  background: linear-gradient(
+    180deg,
+    var(--portal-blue) 0%,
+    darken(var(--portal-blue), 15%) 100%
+  );
+}
+
+.new-round-button {
+  background: linear-gradient(
+    180deg,
+    var(--portal-orange) 0%,
+    darken(var(--portal-orange), 15%) 100%
+  );
+}
+
+/* Leave button with vintage warning styling */
+.leave-button {
+  padding: 0.8rem 1.2rem;
+  font-size: 1rem;
+  font-family: 'Righteous', cursive;
+  background: linear-gradient(
+    180deg,
+    var(--danger) 0%,
+    darken(var(--danger), 15%) 100%
+  );
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  border-top: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 4px 8px rgba(255, 82, 82, 0.2),
+    inset 0 2px 4px rgba(255, 255, 255, 0.2),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.leave-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 
+    0 6px 12px rgba(255, 82, 82, 0.3),
+    inset 0 2px 4px rgba(255, 255, 255, 0.3),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Admin panel header styles */
+.db-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.db-header h3 {
+  margin: 0;
+}
+
+/* Leave admin button styles */
+.leave-admin-button {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  background: linear-gradient(
+    180deg,
+    #64748b 0%,
+    #475569 100%
+  );
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Righteous', cursive;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    inset 0 1px 2px rgba(255, 255, 255, 0.2);
+}
+
+.leave-admin-button:hover {
+  transform: translateY(-1px);
+  background: linear-gradient(
+    180deg,
+    #475569 0%,
+    #334155 100%
+  );
+  box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.15),
+    inset 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+/* Login styles */
+.login-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 3rem;
+  background: linear-gradient(180deg, 
+    #E8E8E8 0%, 
+    #D8D8D8 20%,
+    #C8C8C8 100%
+  );
+  border-radius: 24px;
+  position: relative;
+  overflow: hidden;
+  max-width: 600px;
+  margin: 0 auto;
+  /* Radio case styling */
+  border: 2px solid #A0A0A0;
+  box-shadow: 
+    /* Outer shadow */
+    0 10px 20px rgba(0, 0, 0, 0.2),
+    /* Chrome trim effect */
+    inset 0 0 0 3px rgba(255, 255, 255, 0.9),
+    /* Inner shadow */
+    inset 0 0 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Speaker grille pattern */
+.login-container::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  background-image: 
+    radial-gradient(circle at center, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 1px, transparent 1px),
+    radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 10px 10px;
+  background-position: 0 0, 5px 5px;
+  border-radius: 0 0 24px 24px;
+  opacity: 0.5;
+}
+
+/* Chrome trim at top */
+.login-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  background: linear-gradient(90deg,
+    #888 0%,
+    #CCC 20%,
+    #DDD 30%,
+    #CCC 40%,
+    #DDD 50%,
+    #CCC 60%,
+    #DDD 70%,
+    #CCC 80%,
+    #888 100%
+  );
+  border-radius: 24px 24px 0 0;
+  box-shadow: 
+    inset 0 -2px 4px rgba(0, 0, 0, 0.2),
+    0 2px 4px rgba(255, 255, 255, 0.5);
+}
+
+.name-input,
+.room-input {
+  padding: 1rem 1.2rem;
+  font-size: 1.1rem;
+  font-family: "Courier New", monospace;
+  border: 2px solid #909090;
+  border-radius: 12px;
+  background: linear-gradient(180deg,
+    #F0F0F0 0%,
+    #E8E8E8 100%
+  );
+  color: #333;
+  transition: all 0.3s ease;
+  /* Inset display effect */
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.1),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.5);
+  /* Radio display style */
+  letter-spacing: 1px;
+  position: relative;
+}
+
+/* Input tuning dial */
+.name-input::before,
+.room-input::before {
+  content: '';
+  position: absolute;
+  right: -15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  background: radial-gradient(
+    circle at center,
+    #CCC 0%,
+    #BBB 50%,
+    #999 100%
+  );
+  border-radius: 50%;
+  border: 2px solid #888;
+  box-shadow: 
+    inset 0 2px 4px rgba(255, 255, 255, 0.8),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.name-input:focus,
+.room-input:focus {
+  border-color: #707070;
+  outline: none;
+  background: linear-gradient(180deg,
+    #FFFFFF 0%,
+    #F0F0F0 100%
+  );
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.05),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.8);
+}
+
+/* Base button styles with 50s appliance aesthetics */
+.create-button,
+.join-button,
+.admin-login-button {
+  position: relative;
+  padding: 1rem 2rem;
+  font-family: 'Righteous', cursive;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  
+  /* Chrome-style trim at top */
+  border-top: 2px solid rgba(255, 255, 255, 0.8);
+  
+  /* Bakelite-inspired texture */
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    transparent 50%,
+    rgba(0, 0, 0, 0.1) 100%
+  );
+  
+  /* Dimensional effects */
+  box-shadow: 
+    /* Outer glow */
+    0 6px 12px rgba(0, 0, 0, 0.2),
+    /* Inner top light */
+    inset 0 2px 4px rgba(255, 255, 255, 0.3),
+    /* Inner bottom shadow */
+    inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Chrome trim effect */
+.create-button::before,
+.join-button::before,
+.admin-login-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 5%;
+  right: 5%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.8) 20%,
+    rgba(255, 255, 255, 0.8) 80%,
+    transparent 100%
+  );
+}
+
+/* Button hover states */
+.create-button:hover,
+.join-button:hover,
+.admin-login-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 8px 16px rgba(0, 0, 0, 0.2),
+    inset 0 2px 4px rgba(255, 255, 255, 0.4),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Button active states */
+.create-button:active,
+.join-button:active,
+.admin-login-button:active {
+  transform: translateY(1px);
+  box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.2),
+    inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Button disabled states */
+.create-button:disabled,
+.join-button:disabled,
+.admin-login-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    inset 0 1px 2px rgba(255, 255, 255, 0.2);
+}
+
+/* Individual button colors */
+.create-button {
+  background-color: var(--mint);
+  color: #1a5a1a;
+}
+
+.join-button {
+  background-color: var(--cherry);
+  color: white;
+}
+
+.admin-login-button {
+  background-color: var(--portal-blue);
+  color: white;
+  margin-top: 2rem;
+}
+
+/* Button group styling */
+.button-group {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+  padding: 1rem;
+  position: relative;
+  /* Control panel background */
+  background: linear-gradient(180deg,
+    #D0D0D0 0%,
+    #C0C0C0 100%
+  );
+  border-radius: 16px;
+  border: 1px solid #A0A0A0;
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.8),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.button-group::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40%;
+  height: 4px;
+  background: linear-gradient(90deg,
+    #888 0%,
+    #CCC 30%,
+    #CCC 70%,
+    #888 100%
+  );
+  border-radius: 2px;
+}
+
+.button-group button {
+  flex: 1;
+  min-width: 160px;
+  position: relative;
+}
+
+/* Admin panel styles */
+.admin-panel {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: var(--surface-alt);
+  border-radius: 12px;
+  box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.1),
+    inset 0 0 32px rgba(0, 188, 212, 0.05);
+  position: relative;
+}
+
+.admin-login-panel {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: relative;
+}
+
+.admin-login-panel > div {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+}
+
+.admin-password-input {
+  flex: 1;
+  padding: 0.8rem 1rem;
+  font-family: "Courier New", monospace;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--surface-alt);
+  color: var(--text);
+  transition: all 0.3s ease;
+}
+
+.admin-submit-button {
+  white-space: nowrap;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(180deg, var(--primary) 0%, darken(var(--primary), 15%) 100%);
+  color: white;
+  font-family: 'Righteous', cursive;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 4px 8px rgba(0, 188, 212, 0.2),
+    inset 0 1px 2px rgba(255, 255, 255, 0.2);
+}
+
+.admin-submit-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 
+    0 6px 12px rgba(0, 188, 212, 0.3),
+    inset 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+.admin-login-button {
+  margin-top: 2rem;
+}
+
+/* Error message in admin login */
+.admin-login-panel + .error-message {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--danger);
+}

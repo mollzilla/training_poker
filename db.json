@@ -1,0 +1,48 @@
+{
+  "rooms": [
+    {
+      "id": "6a51795e-749d-4d04-9261-2ddc304faf50",
+      "name": "55",
+      "createdBy": "mi",
+      "showVotes": false,
+      "storyPoint": ""
+    },
+    {
+      "id": "3958ab10-f1ff-4a62-9251-0bf0b57b6f6b",
+      "name": "mila",
+      "createdBy": "mila",
+      "showVotes": false,
+      "storyPoint": ""
+    }
+  ],
+  "users": [
+    {
+      "id": "128c65dc-997c-4504-8943-31b5103188d1",
+      "name": "mila",
+      "roomId": "3958ab10-f1ff-4a62-9251-0bf0b57b6f6b",
+      "role": "croupier"
+    },
+    {
+      "id": "e982695a-5d92-4bed-becc-87ba64bc6b62",
+      "name": "player 1",
+      "roomId": "3958ab10-f1ff-4a62-9251-0bf0b57b6f6b",
+      "role": "player"
+    }
+  ],
+  "votes": [
+    {
+      "id": "209ce7df-7fe2-4427-a7b0-4060eb33851f",
+      "userId": "e982695a-5d92-4bed-becc-87ba64bc6b62",
+      "roomId": "3958ab10-f1ff-4a62-9251-0bf0b57b6f6b",
+      "answer": "asdasdfasdfadsfasdf",
+      "timestamp": 1748894876103
+    },
+    {
+      "id": "dc52ef25-5850-4c8f-9cbb-f52dc8ef6132",
+      "userId": "128c65dc-997c-4504-8943-31b5103188d1",
+      "roomId": "3958ab10-f1ff-4a62-9251-0bf0b57b6f6b",
+      "answer": "adsfasdfsaf",
+      "timestamp": 1748894886855
+    }
+  ]
+}
