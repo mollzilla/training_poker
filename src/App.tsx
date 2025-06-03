@@ -448,6 +448,9 @@ function App() {
                   {votes.find(v => v.userId === user.id)?.answer || '...'}
                 </div>
               )}
+              <div className="indicator-light red"></div>
+              <div className="indicator-light orange"></div>
+              <div className="indicator-light yellow"></div>
             </div>
           ))}
         </div>

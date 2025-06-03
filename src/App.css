@@ -142,7 +142,8 @@ h1 {
   );
   border-radius: 24px;
   padding: 2rem;
-  position: relative;
+  padding-bottom: 2rem; /* Adjusted padding */
+  position: relative; /* Ensure this is set */
   transition: all 0.3s ease;
   border: 2px solid #DDD;
   box-shadow: 
@@ -253,20 +254,88 @@ h1 {
 }
 
 /* Control panel dots */
+.user-item > span::before,
 .user-item > span::after {
+  display: none;
+}
+
+/* Base styles for all indicator lights */
+.indicator-light {
+  position: absolute;
+  bottom: 12px;
+  width: 12px; /* Half the size of the top knob */
+  height: 12px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+/* Red light */
+.indicator-light.red {
+  left: 20px;
+  background: radial-gradient(
+    circle at 35% 35%,
+    #ffcdd2 0%,    /* Light red */
+    #ef9a9a 40%,   /* Medium light red */
+    #e57373 60%,   /* Medium red */
+    #ef5350 100%   /* Slightly darker red */
+  );
+  border: 1px solid #ffcdd2;
+  box-shadow: 
+    inset 0 1px 2px rgba(255, 255, 255, 0.5),
+    inset 0 -1px 2px rgba(239, 83, 80, 0.3),
+    0 0 2px rgba(239, 83, 80, 0.2);
+}
+
+/* Orange light */
+.indicator-light.orange {
+  left: 44px; /* 20px + 12px + 12px gap */
+  background: radial-gradient(
+    circle at 35% 35%,
+    #ffe0b2 0%,    /* Light orange */
+    #ffcc80 40%,   /* Medium light orange */
+    #ffb74d 60%,   /* Medium orange */
+    #ffa726 100%   /* Slightly darker orange */
+  );
+  border: 1px solid #ffe0b2;
+  box-shadow: 
+    inset 0 1px 2px rgba(255, 255, 255, 0.5),
+    inset 0 -1px 2px rgba(255, 167, 38, 0.3),
+    0 0 2px rgba(255, 167, 38, 0.2);
+}
+
+/* Yellow light */
+.indicator-light.yellow {
+  left: 68px; /* 20px + 12px + 12px + 12px + 12px gap */
+  background: radial-gradient(
+    circle at 35% 35%,
+    #fff9c4 0%,    /* Light yellow */
+    #fff59d 40%,   /* Medium light yellow */
+    #fff176 60%,   /* Medium yellow */
+    #ffee58 100%   /* Slightly darker yellow */
+  );
+  border: 1px solid #fff9c4;
+  box-shadow: 
+    inset 0 1px 2px rgba(255, 255, 255, 0.5),
+    inset 0 -1px 2px rgba(255, 238, 88, 0.3),
+    0 0 2px rgba(255, 238, 88, 0.2);
+}
+
+/* Add glass effect to all lights */
+.indicator-light::after {
   content: '';
   position: absolute;
-  top: 10px;
-  left: 20px;
-  display: flex;
-  gap: 8px;
-  height: 8px;
-  width: 8px;
-  background: var(--portal-orange);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   border-radius: 50%;
-  box-shadow: 
-    16px 0 0 var(--portal-blue),
-    32px 0 0 var(--primary);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.4) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0) 51%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
 }
 
 /* User name display panel */
