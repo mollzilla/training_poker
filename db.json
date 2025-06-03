@@ -1,5 +1,53 @@
 {
-  "rooms": [],
-  "users": [],
-  "votes": []
+  "rooms": [
+    {
+      "id": "7b803b38-decc-4545-b3de-97f0d4546984",
+      "name": "asdasd",
+      "createdBy": "sdadsdsadasd",
+      "showVotes": false,
+      "storyPoint": ""
+    },
+    {
+      "id": "757aa224-d71a-43e7-a88c-534ba7c178ba",
+      "name": "22",
+      "createdBy": "sdfdf",
+      "showVotes": false,
+      "storyPoint": ""
+    }
+  ],
+  "users": [
+    {
+      "id": "187bc207-3faa-4793-b323-60d8a50c1ac4",
+      "name": "sdadsdsadasd",
+      "roomId": "7b803b38-decc-4545-b3de-97f0d4546984",
+      "role": "croupier"
+    },
+    {
+      "id": "133875f1-7570-4d09-a72d-21af0d416e32",
+      "name": "asdasdasdasdasdasd",
+      "roomId": "7b803b38-decc-4545-b3de-97f0d4546984",
+      "role": "player"
+    },
+    {
+      "id": "6d637d1c-da1b-4ccb-a05f-811c82d4fbc7",
+      "name": "sdfdf",
+      "roomId": "757aa224-d71a-43e7-a88c-534ba7c178ba",
+      "role": "croupier"
+    },
+    {
+      "id": "96f62175-93e5-4301-989e-35c1e8b856fa",
+      "name": "werewrere",
+      "roomId": "757aa224-d71a-43e7-a88c-534ba7c178ba",
+      "role": "player"
+    }
+  ],
+  "votes": [
+    {
+      "id": "30e6c27c-1086-40e2-b9c4-81d25811d5a9",
+      "userId": "6d637d1c-da1b-4ccb-a05f-811c82d4fbc7",
+      "roomId": "757aa224-d71a-43e7-a88c-534ba7c178ba",
+      "answer": "sadasdasdsads",
+      "timestamp": 1748958174755
+    }
+  ]
 }

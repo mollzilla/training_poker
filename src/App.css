@@ -493,6 +493,32 @@ h1 {
   transform: translateY(-1px);
 }
 
+@media (prefers-color-scheme: dark) {
+  .answer-input {
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.95) 0%,
+      rgba(20, 20, 20, 0.95) 100%
+    );
+    color: #ECEFF1;
+    border-color: #444;
+    box-shadow: 
+      /* Outer shadow */
+      0 2px 4px rgba(0, 0, 0, 0.2),
+      /* Inner top light */
+      inset 0 2px 4px rgba(255, 255, 255, 0.1),
+      /* Inner shadow */
+      inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .answer-input:focus {
+    border-color: var(--primary);
+    box-shadow: 
+      0 0 0 3px rgba(0, 188, 212, 0.1),
+      inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+}
+
 /* Character counter styling */
 .character-count {
   font-family: "Courier New", monospace;
