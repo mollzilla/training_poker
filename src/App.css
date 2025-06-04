@@ -274,37 +274,81 @@ h1 {
   }
 }
 
+@keyframes lightPulse {
+  0% {
+    box-shadow: 
+      inset 0 1px 2px rgba(255, 255, 255, 1),
+      inset 0 -1px 2px rgba(76, 175, 80, 0.8),
+      0 0 12px rgba(76, 175, 80, 0.9);
+  }
+  50% {
+    box-shadow: 
+      inset 0 1px 2px rgba(255, 255, 255, 1),
+      inset 0 -1px 2px rgba(76, 175, 80, 0.8),
+      0 0 16px rgba(76, 175, 80, 1);
+  }
+  100% {
+    box-shadow: 
+      inset 0 1px 2px rgba(255, 255, 255, 1),
+      inset 0 -1px 2px rgba(76, 175, 80, 0.8),
+      0 0 12px rgba(76, 175, 80, 0.9);
+  }
+}
+
 /* Control panel dots */
 .user-item > span::before,
 .user-item > span::after {
   display: none;
 }
 
+/* Indicator lights container */
+.indicator-lights {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  margin-top: 1rem;
+}
+
 /* Base styles for all indicator lights */
 .indicator-light {
-  position: absolute;
-  bottom: 12px;
-  width: 12px; /* Half the size of the top knob */
+  width: 12px;
   height: 12px;
   border-radius: 50%;
   transition: all 0.3s ease;
+  position: relative;
 }
 
-/* Red light */
-.indicator-light.red {
-  left: 20px;
+/* Off state */
+.indicator-light.off {
   background: radial-gradient(
     circle at 35% 35%,
-    #ffcdd2 0%,    /* Light red */
-    #ef9a9a 40%,   /* Medium light red */
-    #e57373 60%,   /* Medium red */
-    #ef5350 100%   /* Slightly darker red */
+    #2d7a33 0%,    /* Medium dark green */
+    #236428 40%,   /* Darker green */
+    #1b4a1f 60%,   /* Very dark green */
+    #133615 100%   /* Almost black green */
   );
-  border: 1px solid #ffcdd2;
+  border: 1px solid #2d7a33;
   box-shadow: 
-    inset 0 1px 2px rgba(255, 255, 255, 0.5),
-    inset 0 -1px 2px rgba(239, 83, 80, 0.3),
-    0 0 2px rgba(239, 83, 80, 0.2);
+    inset 0 1px 2px rgba(255, 255, 255, 0.15),
+    inset 0 -1px 2px rgba(27, 74, 31, 0.8),
+    0 0 1px rgba(27, 74, 31, 0.5);
+}
+
+/* On state */
+.indicator-light.on {
+  background: radial-gradient(
+    circle at 35% 35%,
+    #81c784 0%,    /* Light green */
+    #66bb6a 40%,   /* Medium light green */
+    #4caf50 60%,   /* Medium green */
+    #43a047 100%   /* Slightly darker green */
+  );
+  border: 1px solid #81c784;
+  box-shadow: 
+    inset 0 1px 2px rgba(255, 255, 255, 1),
+    inset 0 -1px 2px rgba(76, 175, 80, 0.8),
+    0 0 12px rgba(76, 175, 80, 0.9);
+  animation: lightPulse 2s ease-in-out infinite;
 }
 
 /* Orange light */
@@ -341,22 +385,17 @@ h1 {
     0 0 2px rgba(255, 238, 88, 0.2);
 }
 
-/* Add glass effect to all lights */
+/* Highlight spot on lights */
 .indicator-light::after {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  top: 25%;
+  left: 25%;
+  width: 25%;
+  height: 25%;
   border-radius: 50%;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.4) 0%,
-    rgba(255, 255, 255, 0.1) 50%,
-    rgba(255, 255, 255, 0) 51%,
-    rgba(255, 255, 255, 0.1) 100%
-  );
+  background: rgba(255, 255, 255, 0.95);
+  filter: blur(0.5px);
 }
 
 /* User name display panel */
@@ -1162,4 +1201,45 @@ h1 {
   .current-question h2 {
     color: var(--primary);
   }
+}
+
+/* Winner selection styles */
+.buttons-container {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.winner-select {
+  padding: 0.8rem 1.2rem;
+  font-size: 1.1rem;
+  font-family: "Courier New", monospace;
+  border: 2px solid var(--portal-blue);
+  border-radius: 12px;
+  background: linear-gradient(180deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(248, 248, 248, 0.95) 100%
+  );
+  color: #333;
+  transition: all 0.3s ease;
+  min-width: 200px;
+  cursor: pointer;
+  box-shadow: 
+    inset 0 2px 4px rgba(255, 255, 255, 0.8),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.winner-select:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  border-color: #999;
+}
+
+.winner-select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 
+    0 0 0 3px rgba(0, 188, 212, 0.2),
+    inset 0 2px 4px rgba(0, 188, 212, 0.1);
 }
