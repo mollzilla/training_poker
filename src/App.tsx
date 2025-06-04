@@ -7,7 +7,6 @@ import {
   useGetUsersQuery,
   useGetVotesQuery,
   useCastVoteMutation,
-  useClearVotesMutation,
   useUpdateRoomMutation,
   useLeaveRoomMutation,
   useGetAdminDataQuery
@@ -29,12 +28,12 @@ function App() {
   const [dbFlushError, setDbFlushError] = useState<string | null>(null)
   const [currentAnswer, setCurrentAnswer] = useState('')
   const [currentQuestion, setCurrentQuestion] = useState('')
+  const [selectedWinners, setSelectedWinners] = useState<string[]>([])
 
   const [createRoom, { isLoading: isCreatingRoom }] = useCreateRoomMutation()
   const [joinRoom, { isLoading: isJoiningRoom }] = useJoinRoomMutation()
   const [leaveRoom] = useLeaveRoomMutation()
   const [castVote, { isLoading: isVoting }] = useCastVoteMutation()
-  const [clearVotes] = useClearVotesMutation()
   const [updateRoom, { isLoading: isUpdatingRoom }] = useUpdateRoomMutation()
 
   const { 
@@ -132,6 +131,7 @@ function App() {
           createdBy: userName.trim(),
           showVotes: false,
           roundNumber: 1,
+          winners: [],
           currentQuestion: null,
         }).unwrap()
 
@@ -227,6 +227,7 @@ function App() {
           ...room, 
           showVotes: false, 
           currentQuestion: null,
+          currentWinners: [],
           roundNumber: (room.roundNumber ?? 1) + 1
         }).unwrap()
         
@@ -288,6 +289,38 @@ function App() {
     } catch (err) {
       setDbFlushError('Failed to flush database. Please try again.')
       console.error('Flush error:', err)
+    }
+  }
+
+  const handleSetWinners = async (winnerIds: string[]) => {
+    if (room) {
+      try {
+        // Create a new winners array based on existing wins
+        const winners = [...(room.winners || [])]
+        
+        // For each winner, either increment their wins or add them as a new winner
+        // But first remove them if they're already in the array to avoid double counting
+        winnerIds.forEach(winnerId => {
+          // Remove any existing entry for this user
+          const winnerIndex = winners.findIndex(w => w.userId === winnerId)
+          if (winnerIndex >= 0) {
+            winners.splice(winnerIndex, 1)
+          }
+          
+          // Calculate total wins by counting previous wins (if any) plus this round
+          const previousWins = room.winners?.find(w => w.userId === winnerId)?.wins ?? 0
+          winners.push({ userId: winnerId, wins: previousWins + 1 })
+        })
+
+        await updateRoom({
+          ...room,
+          currentWinners: winnerIds,
+          winners
+        }).unwrap()
+      } catch (err) {
+        setError('Failed to set winners. Please try again.')
+        console.error('Set winners error:', err)
+      }
     }
   }
 
@@ -517,9 +550,20 @@ function App() {
                     )?.answer || '...'}
                   </div>
                 )}
-                <div className="indicator-light red"></div>
-                <div className="indicator-light orange"></div>
-                <div className="indicator-light yellow"></div>
+                {!isUserCroupier && (
+                  <div className="indicator-lights">
+                    {Array.from({ length: 10 }, (_, i) => (
+                      <div 
+                        key={i} 
+                        className={`indicator-light ${
+                          (room?.winners?.find(w => w.userId === user.id)?.wins ?? 0) > i 
+                            ? 'on' 
+                            : 'off'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
             )
           })}
@@ -575,23 +619,61 @@ function App() {
 
         {isCroupier && (
           <div className="controls">
-            {!room?.showVotes ? (
-              <button 
-                onClick={handleReveal} 
-                className="reveal-button"
-                disabled={!allVoted || isUpdatingRoom}
-              >
-                Reveal Answers
-              </button>
-            ) : (
-              <button 
-                onClick={handleNewRound} 
-                className="new-round-button"
-                disabled={isUpdatingRoom}
-              >
-                New Round
-              </button>
-            )}
+            <div className="buttons-container">
+              {!room?.showVotes ? (
+                <button 
+                  onClick={handleReveal} 
+                  className="reveal-button"
+                  disabled={!allVoted || isUpdatingRoom}
+                >
+                  Reveal Answers
+                </button>
+              ) : (
+                <>
+                  <div className="winner-checkbox-group">
+                    {nonCroupierUsers.map(user => (
+                      <label key={user.id} className="winner-checkbox-label">
+                        <input
+                          type="checkbox"
+                          checked={selectedWinners.includes(user.id)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setSelectedWinners([...selectedWinners, user.id])
+                            } else {
+                              setSelectedWinners(selectedWinners.filter(id => id !== user.id))
+                            }
+                          }}
+                          disabled={!room.showVotes || isUpdatingRoom}
+                          className="winner-checkbox"
+                        />
+                        <span>{user.name}</span>
+                      </label>
+                    ))}
+                  </div>
+                  <div className="winner-buttons">
+                    <button
+                      onClick={() => {
+                        handleSetWinners(selectedWinners);
+                      }}
+                      className="submit-winners-button"
+                      disabled={isUpdatingRoom || selectedWinners.length === 0}
+                    >
+                      Set Winners
+                    </button>
+                    <button 
+                      onClick={() => {
+                        handleNewRound();
+                        setSelectedWinners([]);
+                      }} 
+                      className="new-round-button"
+                      disabled={isUpdatingRoom}
+                    >
+                      New Round
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         )}
       </div>

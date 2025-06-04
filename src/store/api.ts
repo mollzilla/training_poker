@@ -6,6 +6,11 @@ export interface Room {
   createdBy: string;
   showVotes: boolean;
   roundNumber?: number;
+  currentWinners: string[];
+  winners: Array<{
+    userId: string;
+    wins: number;
+  }>;
   currentQuestion: {
     id: string;
     text: string;
