@@ -28,6 +28,7 @@ function App() {
   const [showConfirmFlush, setShowConfirmFlush] = useState(false)
   const [dbFlushError, setDbFlushError] = useState<string | null>(null)
   const [currentAnswer, setCurrentAnswer] = useState('')
+  const [currentQuestion, setCurrentQuestion] = useState('')
 
   const [createRoom, { isLoading: isCreatingRoom }] = useCreateRoomMutation()
   const [joinRoom, { isLoading: isJoiningRoom }] = useJoinRoomMutation()
@@ -130,7 +131,8 @@ function App() {
           name: roomName.trim(),
           createdBy: userName.trim(),
           showVotes: false,
-          storyPoint: '',
+          roundNumber: 1,
+          currentQuestion: null,
         }).unwrap()
 
         const user = await joinRoom({
@@ -158,8 +160,34 @@ function App() {
     }
   }
 
+  const handleSubmitQuestion = async () => {
+    if (currentRoom && currentUser && currentQuestion.trim()) {
+      try {
+        if (currentQuestion.length > MAX_ANSWER_LENGTH) {
+          setError(`Question must be ${MAX_ANSWER_LENGTH} characters or less`)
+          return
+        }
+        
+        if (room) {
+          await updateRoom({
+            ...room,
+            currentQuestion: {
+              id: crypto.randomUUID(),
+              text: currentQuestion.trim(),
+              timestamp: Date.now()
+            }
+          }).unwrap()
+          setCurrentQuestion('')
+        }
+      } catch (err) {
+        setError('Failed to submit question. Please try again.')
+        console.error('Question submission error:', err)
+      }
+    }
+  }
+
   const handleSubmitAnswer = async () => {
-    if (currentRoom && currentUser && currentAnswer.trim()) {
+    if (currentRoom && currentUser && currentAnswer.trim() && room?.currentQuestion) {
       try {
         if (currentAnswer.length > MAX_ANSWER_LENGTH) {
           setError(`Answer must be ${MAX_ANSWER_LENGTH} characters or less`)
@@ -168,6 +196,7 @@ function App() {
         await castVote({
           userId: currentUser,
           roomId: currentRoom,
+          questionId: room.currentQuestion.id,
           answer: currentAnswer.trim(),
           timestamp: Date.now()
         }).unwrap()
@@ -193,8 +222,17 @@ function App() {
   const handleNewRound = async () => {
     if (room) {
       try {
-        await clearVotes(room.id).unwrap()
-        await updateRoom({ ...room, showVotes: false, storyPoint: '' }).unwrap()
+        // Update the room to reset the state but keep votes history
+        await updateRoom({ 
+          ...room, 
+          showVotes: false, 
+          currentQuestion: null,
+          roundNumber: (room.roundNumber ?? 1) + 1
+        }).unwrap()
+        
+        // Reset local state
+        setCurrentQuestion('')
+        setCurrentAnswer('')
       } catch (err) {
         setError('Failed to start new round. Please try again.')
         console.error('New round error:', err)
@@ -348,7 +386,14 @@ function App() {
   )
 
   const isCroupier = users.find(u => u.id === currentUser)?.role === 'croupier'
-  const allVoted = users.length > 1 && votes.length >= users.length
+  const nonCroupierUsers = users.filter(u => u.role === 'player')
+  const currentQuestionVotes = room?.currentQuestion?.id 
+    ? votes.filter(v => {
+        const voter = users.find(u => u.id === v.userId)
+        return v.questionId === room.currentQuestion?.id && voter?.role === 'player'
+      })
+    : []
+  const allVoted = nonCroupierUsers.length > 0 && currentQuestionVotes.length >= nonCroupierUsers.length
   const isLoading = isLoadingRoom || isLoadingUsers || isLoadingVotes
 
   if (!currentRoom) {
@@ -418,63 +463,113 @@ function App() {
   return (
     <div className="container" id="active-room">
       <h1>Welcome to Training Poker</h1>
-      {isCroupier && (
-        <div className="room-info">
-          <p className="room-link">
-            Room link: <span className="link-text">{`${window.location.origin}?room=${room?.name}`}</span>
-            <button 
-              onClick={() => navigator.clipboard.writeText(`${window.location.origin}?room=${room?.name}`)}
-              className="copy-link-button"
-              title="Copy room link"
-            >
-              Copy
-            </button>
-          </p>
-        </div>
-      )}
+      {/* Room link temporarily disabled
+        {isCroupier && (
+          <div className="room-info">
+            <p className="room-link">
+              Room link: <span className="link-text">{`${window.location.origin}?room=${room?.name}`}</span>
+              <button 
+                onClick={() => navigator.clipboard.writeText(`${window.location.origin}?room=${room?.name}`)}
+                className="copy-link-button"
+                title="Copy room link"
+              >
+                Copy
+              </button>
+            </p>
+          </div>
+        )}
+      */}
       <div className="room-container">
         <div className="room-header">
-          <h2>Room: {room?.name}</h2>
+          <div>
+            <h2>Room: {room?.name}</h2>
+            <div className="round-indicator">Round {room?.roundNumber ?? 1}</div>
+          </div>
           <button onClick={handleLeave} className="leave-button">Leave Room</button>
         </div>
 
-          <h3>Users</h3>
-        <div className={`users-list ${room?.showVotes ? 'votes-shown' : ''}`}>
-          {users.map((user) => (
-            <div key={user.id} className={`user-item ${votes.some(v => v.userId === user.id) ? 'has-voted' : ''}`}>
-              <span>{user.name} ({user.role})</span>
-              {room?.showVotes && (
-                <div className="answer-display">
-                  {votes.find(v => v.userId === user.id)?.answer || '...'}
-                </div>
-              )}
-              <div className="indicator-light red"></div>
-              <div className="indicator-light orange"></div>
-              <div className="indicator-light yellow"></div>
-            </div>
-          ))}
+        {room?.currentQuestion && (
+          <div className="current-question">
+            <h2>{room.currentQuestion.text}</h2>
+          </div>
+        )}
+
+        <div className="users-list">
+          {users.map((user) => {
+            const hasVoted = votes.some(v => 
+              v.userId === user.id && 
+              room?.currentQuestion?.id === v.questionId
+            )
+            const isUserCroupier = user.role === 'croupier'
+            const hasCroupierPostedQuestion = isUserCroupier && room?.currentQuestion !== null
+
+            return (
+              <div 
+                key={user.id} 
+                className={`user-item ${!isUserCroupier && hasVoted ? 'has-voted' : ''} ${hasCroupierPostedQuestion ? 'has-posted-question' : ''}`}
+              >
+                <span>{user.name} ({user.role})</span>
+                {room?.showVotes && room?.currentQuestion?.id && !isUserCroupier && (
+                  <div className="answer-display">
+                    {votes.find(v => 
+                      v.userId === user.id && 
+                      v.questionId === room.currentQuestion?.id
+                    )?.answer || '...'}
+                  </div>
+                )}
+                <div className="indicator-light red"></div>
+                <div className="indicator-light orange"></div>
+                <div className="indicator-light yellow"></div>
+              </div>
+            )
+          })}
         </div>
 
         <div className="answer-area">
           <div className="answer-input-container">
-            <textarea
-              value={currentAnswer}
-              onChange={(e) => setCurrentAnswer(e.target.value)}
-              placeholder="Write your answer (300 characters max)..."
-              className="answer-input"
-              disabled={room?.showVotes || isVoting}
-              maxLength={MAX_ANSWER_LENGTH}
-            />
-            <div className="character-count">
-              {currentAnswer.length}/{MAX_ANSWER_LENGTH}
-            </div>
-            <button
-              onClick={handleSubmitAnswer}
-              className="submit-button"
-              disabled={room?.showVotes || isVoting || !currentAnswer.trim()}
-            >
-              {isVoting ? 'Submitting...' : 'Submit Answer'}
-            </button>
+            {isCroupier ? (
+              <>
+                <textarea
+                  value={currentQuestion}
+                  onChange={(e) => setCurrentQuestion(e.target.value)}
+                  placeholder="Write your question (300 characters max)..."
+                  className="answer-input"
+                  disabled={room?.currentQuestion !== null || isUpdatingRoom}
+                  maxLength={MAX_ANSWER_LENGTH}
+                />
+                <div className="character-count">
+                  {currentQuestion.length}/{MAX_ANSWER_LENGTH}
+                </div>
+                <button
+                  onClick={handleSubmitQuestion}
+                  className="submit-button"
+                  disabled={room?.currentQuestion !== null || isUpdatingRoom || !currentQuestion.trim()}
+                >
+                  {isUpdatingRoom ? 'Submitting...' : 'Post Question'}
+                </button>
+              </>
+            ) : (
+              <>
+                <textarea
+                  value={currentAnswer}
+                  onChange={(e) => setCurrentAnswer(e.target.value)}
+                  placeholder={room?.currentQuestion ? 'Write your answer...' : 'Waiting for question...'}
+                  className="answer-input"
+                  disabled={!room?.currentQuestion || room?.showVotes || isVoting}
+                  maxLength={MAX_ANSWER_LENGTH}
+                />
+                <div className="character-count">
+                  {currentAnswer.length}/{MAX_ANSWER_LENGTH}
+                </div>
+                <button
+                  onClick={handleSubmitAnswer}
+                  className="submit-button"
+                  disabled={!room?.currentQuestion || room?.showVotes || isVoting || !currentAnswer.trim()}
+                >
+                  {isVoting ? 'Submitting...' : 'Submit Answer'}
+                </button>
+              </>
+            )}
           </div>
         </div>
 

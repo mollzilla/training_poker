@@ -111,7 +111,7 @@ h1 {
 .room-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 2rem;
   padding-bottom: 1rem;
   border-bottom: 2px solid rgba(0, 188, 212, 0.1);
@@ -207,6 +207,27 @@ h1 {
 
 /* Neon glow effect for voted state */
 .user-item.has-voted::after {
+  background: radial-gradient(
+    circle at center,
+    #98FF98 0%,
+    #50C878 40%,
+    #3CB371 60%,
+    #2E8B57 100%
+  );
+  border-color: #98FF98;
+  box-shadow: 
+    /* Inner glow */
+    inset 0 2px 4px rgba(152, 255, 152, 0.8),
+    inset 0 -2px 4px rgba(46, 139, 87, 0.4),
+    /* Outer neon glow */
+    0 0 10px rgba(152, 255, 152, 0.6),
+    0 0 20px rgba(152, 255, 152, 0.4),
+    0 0 30px rgba(152, 255, 152, 0.2);
+  animation: neonPulse 2s ease-in-out infinite;
+}
+
+/* Neon glow effect for posted question state */
+.user-item.has-posted-question::after {
   background: radial-gradient(
     circle at center,
     #98FF98 0%,
@@ -442,12 +463,17 @@ h1 {
 
 /* Input styles */
 .answer-input-container {
-  background: var(--surface);
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 
-    0 4px 8px rgba(0, 0, 0, 0.05),
-    0 0 0 1px rgba(0, 188, 212, 0.1);
+  position: relative;
+  padding: 2rem;
+  background: linear-gradient(180deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  border-radius: 16px;
+  border: 2px solid rgba(0, 188, 212, 0.1);
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.1),
+    inset 0 0 32px rgba(0, 188, 212, 0.05);
   margin: 2rem 0;
   width: 100%;
   box-sizing: border-box;
@@ -457,19 +483,16 @@ h1 {
 
 .answer-input {
   width: 100%;
-  max-width: 100%;
   min-height: 120px;
   padding: 1.5rem;
-  font-size: 1.1rem;
   font-family: "Courier New", monospace;
-  border: 2px solid #DDD;
-  border-radius: 12px;
-  background: linear-gradient(
-    180deg,
+  font-size: 1.1rem;
+  background: linear-gradient(180deg,
     rgba(255, 255, 255, 0.95) 0%,
     rgba(248, 248, 248, 0.95) 100%
   );
-  color: var(--text);
+  border: 2px solid #DDD;
+  border-radius: 12px;
   resize: vertical;
   transition: all 0.3s ease;
   box-shadow: 
@@ -493,11 +516,20 @@ h1 {
   transform: translateY(-1px);
 }
 
+.answer-input:disabled {
+  background: linear-gradient(180deg,
+    rgba(240, 240, 240, 0.95) 0%,
+    rgba(235, 235, 235, 0.95) 100%
+  );
+  border-color: #EEE;
+  color: #999;
+  cursor: not-allowed;
+}
+
 @media (prefers-color-scheme: dark) {
   .answer-input {
-    background: linear-gradient(
-      180deg,
-      rgba(0, 0, 0, 0.95) 0%,
+    background: linear-gradient(180deg,
+      rgba(30, 30, 30, 0.95) 0%,
       rgba(20, 20, 20, 0.95) 100%
     );
     color: #ECEFF1;
@@ -516,6 +548,23 @@ h1 {
     box-shadow: 
       0 0 0 3px rgba(0, 188, 212, 0.1),
       inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .answer-input:disabled {
+    background: linear-gradient(180deg,
+      rgba(20, 20, 20, 0.95) 0%,
+      rgba(15, 15, 15, 0.95) 100%
+    );
+    border-color: #222;
+    color: #666;
+  }
+
+  .answer-input-container {
+    background: linear-gradient(180deg,
+      rgba(0, 0, 0, 0.3) 0%,
+      rgba(0, 0, 0, 0.2) 100%
+    );
+    border-color: rgba(0, 188, 212, 0.2);
   }
 }
 
@@ -1063,4 +1112,54 @@ h1 {
   margin-top: 0.5rem;
   font-size: 0.9rem;
   color: var(--danger);
+}
+
+/* Current question display styles */
+.current-question {
+  margin: 2rem 0;
+  padding: 2rem;
+  background: linear-gradient(180deg, 
+    rgba(255, 255, 255, 0.1) 0%, 
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  border-radius: 16px;
+  border: 2px solid rgba(0, 188, 212, 0.1);
+  box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.1),
+    inset 0 0 32px rgba(0, 188, 212, 0.05);
+}
+
+.current-question h2 {
+  font-family: 'Righteous', cursive;
+  font-size: 2rem;
+  color: var(--primary);
+  margin: 0;
+  text-align: center;
+  text-shadow: 
+    2px 2px 0px rgba(255, 153, 48, 0.3),
+    -1px -1px 0px rgba(66, 149, 245, 0.3);
+  line-height: 1.4;
+}
+
+.round-indicator {
+  font-family: 'Righteous', cursive;
+  font-size: 1.1rem;
+  color: var(--text-light);
+  margin-top: 0.5rem;
+  padding-left: 0.2rem;
+  letter-spacing: 1px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .current-question {
+    background: linear-gradient(180deg,
+      rgba(0, 0, 0, 0.3) 0%,
+      rgba(0, 0, 0, 0.2) 100%
+    );
+    border-color: rgba(0, 188, 212, 0.2);
+  }
+
+  .current-question h2 {
+    color: var(--primary);
+  }
 }

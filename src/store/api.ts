@@ -5,7 +5,12 @@ export interface Room {
   name: string;
   createdBy: string;
   showVotes: boolean;
-  storyPoint: string;
+  roundNumber?: number;
+  currentQuestion: {
+    id: string;
+    text: string;
+    timestamp: number;
+  } | null;
 }
 
 export interface User {
@@ -19,7 +24,8 @@ export interface Vote {
   id: string;
   userId: string;
   roomId: string;
-  answer: string;  // Changed from value: number
+  questionId: string;
+  answer: string;
   timestamp: number;
 }
 
@@ -167,9 +173,8 @@ export const api = createApi({
     }),
     clearVotes: builder.mutation<void, string>({
       query: (roomId) => ({
-        url: 'votes',
-        method: 'DELETE',
-        body: { roomId }
+        url: `votes?roomId=${roomId}`,
+        method: 'DELETE'
       }),
       invalidatesTags: [{ type: 'Vote', id: 'LIST' }]
     })
