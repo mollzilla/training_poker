@@ -24,10 +24,21 @@ This is a real-time Planning Poker application built with:
 npm install
 ```
 
-2. Start both the development server and json-server:
-```bash
-npm run dev:all
-```
+2. Start the development servers:
+   - For local development only:
+   ```bash
+   npm run dev:all
+   ```
+   - To allow external access (for other players to join):
+   ```bash
+   npm run dev:host
+   ```
+
+When using `dev:host`, the servers will be accessible at:
+- Web app: `http://<your-ip>:5173` (or next available port)
+- API server: `http://<your-ip>:3000`
+
+Replace `<your-ip>` with your local IP address (can be found using `ipconfig` on Windows or `ifconfig` on Mac/Linux).
 
 This will start:
 - Vite dev server (the port will be displayed in the terminal, typically http://localhost:5173 or next available port)
@@ -35,11 +46,20 @@ This will start:
 
 ## Available Scripts
 
-- `npm run dev` - Start the Vite development server
-- `npm run server` - Start json-server
-- `npm run dev:all` - Start both servers
+- `npm run dev` - Start the Vite development server (local only)
+- `npm run server` - Start json-server (local only)
+- `npm run dev:all` - Start both servers (local only)
+- `npm run dev:host` - Start both servers with external access (allows other players to join)
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
+
+### External Access
+
+When using `npm run dev:host`:
+1. The servers will bind to all network interfaces (0.0.0.0)
+2. Other players on the same network can join using your machine's IP address
+3. Both the web app and API will be accessible externally
+4. The terminal will show the URLs, including your network IP
 
 ## API Endpoints
 
