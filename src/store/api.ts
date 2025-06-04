@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { API_BASE_URL } from '../config';
 
 export interface Room {
   id: string;
@@ -38,7 +39,7 @@ export const MAX_ANSWER_LENGTH = 300;
 
 export const api = createApi({
   reducerPath: 'api',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000' }),
+  baseQuery: fetchBaseQuery({ baseUrl: API_BASE_URL }),
   tagTypes: ['Room', 'User', 'Vote'],
   refetchOnFocus: true,
   refetchOnMountOrArgChange: true,

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { API_BASE_URL } from './config'
 import {
   useCreateRoomMutation,
   useJoinRoomMutation,
@@ -9,7 +10,8 @@ import {
   useCastVoteMutation,
   useUpdateRoomMutation,
   useLeaveRoomMutation,
-  useGetAdminDataQuery
+  useGetAdminDataQuery,
+  useResetDatabaseMutation
 } from './store/store'
 import { MAX_ANSWER_LENGTH } from './store/api'
 import './App.css'
@@ -35,6 +37,7 @@ function App() {
   const [leaveRoom] = useLeaveRoomMutation()
   const [castVote, { isLoading: isVoting }] = useCastVoteMutation()
   const [updateRoom, { isLoading: isUpdatingRoom }] = useUpdateRoomMutation()
+  const [resetDatabase] = useResetDatabaseMutation()
 
   const { 
     data: room,
@@ -79,6 +82,18 @@ function App() {
     skip: !isAdmin,
     pollingInterval: 1000
   })
+
+  const handleDatabaseReset = async () => {
+    if (!isAdmin) return;
+    
+    try {
+      setDbFlushError(null);
+      await resetDatabase().unwrap();
+      setShowConfirmFlush(false);
+    } catch (error) {
+      setDbFlushError('Failed to reset database. Please try again.');
+    }
+  }
 
   useEffect(() => {
     setError(null)
@@ -271,14 +286,14 @@ function App() {
       // Delete all records from each collection
       const collections = ['rooms', 'users', 'votes']
       await Promise.all(collections.map(async (collection) => {
-        const response = await fetch(`http://localhost:3000/${collection}`, {
+        const response = await fetch(`${API_BASE_URL}/${collection}`, {
           method: 'GET',
         })
         const items = await response.json()
         
         // Delete each item in the collection
         await Promise.all(items.map((item: { id: string }) => 
-          fetch(`http://localhost:3000/${collection}/${item.id}`, {
+          fetch(`${API_BASE_URL}/${collection}/${item.id}`, {
             method: 'DELETE',
           })
         ))
