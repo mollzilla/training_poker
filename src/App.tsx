@@ -46,7 +46,7 @@ function App() {
     error: roomError
   } = useGetRoomQuery(currentRoom ?? '', { 
     skip: !currentRoom,
-    pollingInterval: 1000
+    pollingInterval: 1200
   })
   
   const {
@@ -61,7 +61,7 @@ function App() {
     error: usersError
   } = useGetUsersQuery(currentRoom ?? '', { 
     skip: !currentRoom,
-    pollingInterval: 1000
+    pollingInterval: 1200
   })
   
   const { 
@@ -70,7 +70,7 @@ function App() {
     error: votesError
   } = useGetVotesQuery(currentRoom ?? '', { 
     skip: !currentRoom,
-    pollingInterval: 1000
+    pollingInterval: 600
   })
 
   const {
@@ -81,7 +81,7 @@ function App() {
 
   const { data: adminData } = useGetAdminDataQuery(undefined, {
     skip: !isAdmin,
-    pollingInterval: 1000
+    pollingInterval: 1200
   })
 
   const handleDatabaseReset = async () => {
@@ -150,6 +150,8 @@ function App() {
           winners: [],
           currentWinners: [],
           currentQuestion: null,
+          victors: [],
+          showVictoryCelebration: false
         }).unwrap()
 
         const user = await joinRoom({
@@ -341,6 +343,25 @@ function App() {
     }
   }
 
+  const handleAnnounceVictors = async () => {
+    if (room) {
+      try {
+        // Find players with the highest number of wins
+        const maxWins = Math.max(...room.winners.map(w => w.wins))
+        const victors = room.winners.filter(w => w.wins === maxWins).map(w => w.userId)
+        
+        await updateRoom({
+          ...room,
+          victors,
+          showVictoryCelebration: true
+        }).unwrap()
+      } catch (err) {
+        setError('Failed to announce victors. Please try again.')
+        console.error('Announce victors error:', err)
+      }
+    }
+  }
+
   const adminPanel = (
     <>
       {!isAdmin && !showAdminLogin && (
@@ -445,6 +466,42 @@ function App() {
     : []
   const allVoted = nonCroupierUsers.length > 0 && currentQuestionVotes.length >= nonCroupierUsers.length
   const isLoading = isLoadingRoom || isLoadingUsers || isLoadingVotes
+
+  if (room?.showVictoryCelebration) {
+    // Create confetti elements
+    const confettiColors = ['#ffd700', '#ff0000', '#00ff00', '#0000ff', '#ff00ff', '#00ffff']
+    const confetti = Array.from({ length: 50 }, (_, i) => (
+      <div
+        key={i}
+        className="confetti"
+        style={{
+          left: `${Math.random() * 100}vw`,
+          animationDelay: `${Math.random() * 2}s`,
+          '--color': confettiColors[Math.floor(Math.random() * confettiColors.length)]
+        } as React.CSSProperties}
+      />
+    ))
+
+    return (
+      <div className="container">
+        <div className="victory-celebration">
+          {confetti}
+          <h2>{room.victors.length > 1 ? 'Congratulations to our Victors!' : 'Congratulations to our Victor!'}</h2>
+          <div className="victors-list">
+            {room.victors.map(victorId => {
+              const victor = users.find(u => u.id === victorId)
+              return (
+                <div key={victorId} className="victor-name">
+                  {victor?.name}
+                </div>
+              )
+            })}
+          </div>
+          <button onClick={handleLeave} className="leave-button">Leave Room</button>
+        </div>
+      </div>
+    )
+  }
 
   if (!currentRoom) {
     return (
@@ -678,6 +735,13 @@ function App() {
                       Set Winners
                     </button>
                     <button 
+                      onClick={handleAnnounceVictors}
+                      className="announce-victor-button"
+                      disabled={isUpdatingRoom || room.winners.length === 0}
+                    >
+                      Announce Victors
+                    </button>
+                    <button 
                       onClick={() => {
                         handleNewRound();
                         setSelectedWinners([]);
@@ -686,6 +750,13 @@ function App() {
                       disabled={isUpdatingRoom}
                     >
                       New Round
+                    </button>
+                    <button 
+                      onClick={handleAnnounceVictors} 
+                      className="announce-victors-button"
+                      disabled={isUpdatingRoom}
+                    >
+                      Announce Victors
                     </button>
                   </div>
                 </>

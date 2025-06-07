@@ -18,6 +18,8 @@ export interface Room {
     text: string;
     timestamp: number;
   } | null;
+  victors: string[]; // IDs of the final victors
+  showVictoryCelebration: boolean; // Whether to show the victory celebration
 }
 
 export interface User {

@@ -34,6 +34,96 @@
         "text": "que verdura es el perro del oriente",
         "timestamp": 1749325009693
       }
+    },
+    {
+      "id": "5d098001-1730-473a-a2dd-6ee7c54e8e10",
+      "name": "1233",
+      "createdBy": "mila",
+      "showVotes": false,
+      "roundNumber": 2,
+      "winners": [],
+      "currentWinners": [],
+      "currentQuestion": null,
+      "victors": [],
+      "showVictoryCelebration": false
+    },
+    {
+      "id": "3158240b-aed6-41d3-b4ae-24f382fa6d82",
+      "name": "111",
+      "createdBy": "mial",
+      "showVotes": false,
+      "roundNumber": 2,
+      "winners": [
+        {
+          "userId": "71e5df81-8c65-4a56-a2a9-27f350fc9e80",
+          "wins": 1
+        },
+        {
+          "userId": "5d573008-e6dd-4e82-af2d-cc60b0f40bdb",
+          "wins": 1
+        }
+      ],
+      "currentWinners": [],
+      "currentQuestion": null,
+      "victors": [],
+      "showVictoryCelebration": false
+    },
+    {
+      "id": "f61ecc71-4d10-469f-803c-00177fbc442a",
+      "name": "222",
+      "createdBy": "wwewe",
+      "showVotes": false,
+      "roundNumber": 1,
+      "winners": [],
+      "currentWinners": [],
+      "currentQuestion": null,
+      "victors": [],
+      "showVictoryCelebration": false
+    },
+    {
+      "id": "34fbf53d-4d92-4fab-8cf9-cc48dcfc936c",
+      "name": "23",
+      "createdBy": "mial",
+      "showVotes": true,
+      "roundNumber": 2,
+      "winners": [
+        {
+          "userId": "1d620387-9526-4e31-844c-171db4bec540",
+          "wins": 1
+        },
+        {
+          "userId": "ab5f900c-9e22-4791-b4ce-3ea1bce11e8c",
+          "wins": 2
+        }
+      ],
+      "currentWinners": [
+        "ab5f900c-9e22-4791-b4ce-3ea1bce11e8c"
+      ],
+      "currentQuestion": {
+        "id": "ffd68a8a-87b3-4bd1-92a5-78c9c6011300",
+        "text": "sdfsdfsdf",
+        "timestamp": 1749327370253
+      },
+      "victors": [
+        "ab5f900c-9e22-4791-b4ce-3ea1bce11e8c"
+      ],
+      "showVictoryCelebration": true
+    },
+    {
+      "id": "f12fe42a-88b2-4f0a-9336-77be59a8b976",
+      "name": "11111",
+      "createdBy": "mila1",
+      "showVotes": true,
+      "roundNumber": 1,
+      "winners": [],
+      "currentWinners": [],
+      "currentQuestion": {
+        "id": "27969f1e-b2a0-4e79-9105-3e1244e40ebe",
+        "text": "asdasds",
+        "timestamp": 1749327675405
+      },
+      "victors": [],
+      "showVictoryCelebration": false
     }
   ],
   "users": [
@@ -53,6 +143,60 @@
       "id": "c07310bb-d937-4924-8fd1-36c0972e0d78",
       "name": "angel",
       "roomId": "183af383-e4ae-4b23-b577-be15bc1227cf",
+      "role": "player"
+    },
+    {
+      "id": "2f5826e7-4df5-4be8-845c-c0b91d113500",
+      "name": "mila",
+      "roomId": "5d098001-1730-473a-a2dd-6ee7c54e8e10",
+      "role": "croupier"
+    },
+    {
+      "id": "aaadf435-0aae-483e-a56d-7f35566f5f43",
+      "name": "other",
+      "roomId": "5d098001-1730-473a-a2dd-6ee7c54e8e10",
+      "role": "player"
+    },
+    {
+      "id": "e15bc4ff-a57d-4321-89f5-5168602833f9",
+      "name": "mial",
+      "roomId": "3158240b-aed6-41d3-b4ae-24f382fa6d82",
+      "role": "croupier"
+    },
+    {
+      "id": "beb66697-955e-44ca-bc3e-defae865a60f",
+      "name": "mial",
+      "roomId": "34fbf53d-4d92-4fab-8cf9-cc48dcfc936c",
+      "role": "croupier"
+    },
+    {
+      "id": "ab5f900c-9e22-4791-b4ce-3ea1bce11e8c",
+      "name": "wwewe",
+      "roomId": "34fbf53d-4d92-4fab-8cf9-cc48dcfc936c",
+      "role": "player"
+    },
+    {
+      "id": "1d620387-9526-4e31-844c-171db4bec540",
+      "name": "ddd",
+      "roomId": "34fbf53d-4d92-4fab-8cf9-cc48dcfc936c",
+      "role": "player"
+    },
+    {
+      "id": "54b9ffa3-a9f5-49ed-a882-b407a0b6aaff",
+      "name": "mila1",
+      "roomId": "f12fe42a-88b2-4f0a-9336-77be59a8b976",
+      "role": "croupier"
+    },
+    {
+      "id": "f505ee3f-6241-49be-a386-e1abc0de7112",
+      "name": "asas",
+      "roomId": "f12fe42a-88b2-4f0a-9336-77be59a8b976",
+      "role": "player"
+    },
+    {
+      "id": "eb98edb6-d78f-4000-b19b-9dc50b749073",
+      "name": "asdasd",
+      "roomId": "f12fe42a-88b2-4f0a-9336-77be59a8b976",
       "role": "player"
     }
   ],
@@ -80,6 +224,78 @@
       "questionId": "9319c0a6-d95e-43c4-b317-299ed66de114",
       "answer": "achicorio",
       "timestamp": 1749325022352
+    },
+    {
+      "id": "dac4c4db-9744-4ab2-b9f7-fc4c280d6575",
+      "userId": "aaadf435-0aae-483e-a56d-7f35566f5f43",
+      "roomId": "5d098001-1730-473a-a2dd-6ee7c54e8e10",
+      "questionId": "1b784c33-7661-4df8-865f-c76260e2cc8b",
+      "answer": "www",
+      "timestamp": 1749326849452
+    },
+    {
+      "id": "3dd81897-75ca-4a09-93df-f39c06545ae8",
+      "userId": null,
+      "roomId": "3158240b-aed6-41d3-b4ae-24f382fa6d82",
+      "questionId": "654a83c5-7d6b-4cbd-b807-64f2316cd9f3",
+      "answer": "wwwww",
+      "timestamp": 1749327228721
+    },
+    {
+      "id": "e15edcb9-994f-4795-badb-20474e98c5d3",
+      "userId": null,
+      "roomId": "3158240b-aed6-41d3-b4ae-24f382fa6d82",
+      "questionId": "654a83c5-7d6b-4cbd-b807-64f2316cd9f3",
+      "answer": "wwwww",
+      "timestamp": 1749327233003
+    },
+    {
+      "id": "671dbebb-5e67-479c-895f-286cd280b2c1",
+      "userId": "ab5f900c-9e22-4791-b4ce-3ea1bce11e8c",
+      "roomId": "34fbf53d-4d92-4fab-8cf9-cc48dcfc936c",
+      "questionId": "8afbdb31-62ed-4f65-bbff-d015accc8920",
+      "answer": "sdfsdfsdf",
+      "timestamp": 1749327346437
+    },
+    {
+      "id": "3611b41a-ac5a-48b5-859b-439a8b2faaad",
+      "userId": "1d620387-9526-4e31-844c-171db4bec540",
+      "roomId": "34fbf53d-4d92-4fab-8cf9-cc48dcfc936c",
+      "questionId": "8afbdb31-62ed-4f65-bbff-d015accc8920",
+      "answer": "sdfsdfsdfsd",
+      "timestamp": 1749327350788
+    },
+    {
+      "id": "ade68f3f-f0aa-4320-a18e-bdfa22eba6d6",
+      "userId": "ab5f900c-9e22-4791-b4ce-3ea1bce11e8c",
+      "roomId": "34fbf53d-4d92-4fab-8cf9-cc48dcfc936c",
+      "questionId": "ffd68a8a-87b3-4bd1-92a5-78c9c6011300",
+      "answer": "sdfsdf",
+      "timestamp": 1749327372537
+    },
+    {
+      "id": "56b827d9-2888-4076-b355-7e0a8a7fb73f",
+      "userId": "1d620387-9526-4e31-844c-171db4bec540",
+      "roomId": "34fbf53d-4d92-4fab-8cf9-cc48dcfc936c",
+      "questionId": "ffd68a8a-87b3-4bd1-92a5-78c9c6011300",
+      "answer": "dsfsdf",
+      "timestamp": 1749327374754
+    },
+    {
+      "id": "1187415e-25d7-4e04-906a-7b8342d1513b",
+      "userId": "f505ee3f-6241-49be-a386-e1abc0de7112",
+      "roomId": "f12fe42a-88b2-4f0a-9336-77be59a8b976",
+      "questionId": "27969f1e-b2a0-4e79-9105-3e1244e40ebe",
+      "answer": "asdasd",
+      "timestamp": 1749327678987
+    },
+    {
+      "id": "608e0819-3c67-41ca-aeb4-d819ed8b8add",
+      "userId": "eb98edb6-d78f-4000-b19b-9dc50b749073",
+      "roomId": "f12fe42a-88b2-4f0a-9336-77be59a8b976",
+      "questionId": "27969f1e-b2a0-4e79-9105-3e1244e40ebe",
+      "answer": "asdasd",
+      "timestamp": 1749327681887
     }
   ]
 }

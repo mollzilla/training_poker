@@ -732,33 +732,18 @@ h1 {
 
 /* Leave button with vintage warning styling */
 .leave-button {
-  padding: 0.8rem 1.2rem;
-  font-size: 1rem;
-  font-family: 'Righteous', cursive;
-  background: linear-gradient(
-    180deg,
-    var(--danger) 0%,
-    darken(var(--danger), 15%) 100%
-  );
+  background-color: #dc3545;
   color: white;
   border: none;
-  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  border-top: 2px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 
-    0 4px 8px rgba(255, 82, 82, 0.2),
-    inset 0 2px 4px rgba(255, 255, 255, 0.2),
-    inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+  font-weight: bold;
+  transition: background-color 0.2s ease;
 }
 
 .leave-button:hover {
-  transform: translateY(-1px);
-  box-shadow: 
-    0 6px 12px rgba(255, 82, 82, 0.3),
-    inset 0 2px 4px rgba(255, 255, 255, 0.3),
-    inset 0 -2px 4px rgba(0, 0, 0, 0.3);
+  background-color: #c82333;
 }
 
 /* Admin panel header styles */
@@ -1329,26 +1314,31 @@ h1 {
 .winner-checkbox-label {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-family: 'Righteous', cursive;
-  color: var(--text);
-  background: linear-gradient(180deg,
-    rgba(255, 255, 255, 0.5) 0%,
-    rgba(248, 248, 248, 0.5) 100%
-  );
-  border: 1px solid transparent;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
 }
 
-.winner-checkbox-label:hover {
-  background: linear-gradient(180deg,
-    rgba(0, 188, 212, 0.1) 0%,
-    rgba(0, 188, 212, 0.05) 100%
-  );
-  border-color: var(--primary);
+.winner-checkbox-label input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: #ffd700;
+  cursor: pointer;
+}
+
+.winner-checkbox-label input[type="checkbox"]:checked {
+  box-shadow: 0 0 0 2px #ffd700;
+}
+
+.winner-checkbox-label input[type="checkbox"]:checked + span {
+  color: #ffd700;
+  font-weight: bold;
+}
+
+.winner-checkbox-label input[type="checkbox"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .winner-checkbox {
@@ -1399,46 +1389,25 @@ h1 {
 }
 
 .submit-winners-button {
-  min-width: 160px;
-  min-height: 48px;
-  border: none;
-  border-radius: 24px;
-  font-family: 'Righteous', cursive;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  background: linear-gradient(180deg, var(--primary) 0%, darken(var(--primary), 15%) 100%);
+  background-color: #4CAF50;
   color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 
-    0 6px 12px rgba(0, 188, 212, 0.2),
-    inset 0 2px 4px rgba(255, 255, 255, 0.3),
-    inset 0 -2px 4px rgba(0, 0, 0, 0.2);
-  border-top: 2px solid rgba(255, 255, 255, 0.5);
+  font-weight: bold;
+  margin: 0 0.5rem;
+  transition: background-color 0.2s ease;
 }
 
 .submit-winners-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 
-    0 8px 16px rgba(0, 188, 212, 0.3),
-    inset 0 2px 4px rgba(255, 255, 255, 0.4),
-    inset 0 -2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.submit-winners-button:active {
-  transform: translateY(1px);
-  box-shadow: 
-    0 2px 8px rgba(0, 188, 212, 0.2),
-    inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  background-color: #45a049;
 }
 
 .submit-winners-button:disabled {
-  background: #94a3b8;
+  background-color: #cccccc;
+  color: #666666;
   cursor: not-allowed;
-  transform: none;
-  box-shadow: 
-    0 2px 4px rgba(0, 0, 0, 0.1),
-    inset 0 1px 2px rgba(255, 255, 255, 0.2);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -1470,5 +1439,104 @@ h1 {
       rgba(40, 40, 40, 0.95) 0%,
       rgba(30, 30, 30, 0.95) 100%
     );
+  }
+}
+
+/* Victory celebration styles */
+.victory-celebration {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+  z-index: 1000;
+  padding: 2rem;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.victory-celebration h2 {
+  color: #ffd700;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.victors-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.victor-name {
+  background: #ffd700;
+  color: #1a1a1a;
+  padding: 1rem 2rem;
+  border-radius: 30px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  animation: bounce 1s ease infinite;
+}
+
+.announce-victor-button {
+  background-color: #ffd700;
+  color: #1a1a1a;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  margin: 1rem 0;
+  transition: all 0.2s ease;
+}
+
+.announce-victor-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+}
+
+.announce-victor-button:disabled {
+  background-color: #666;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.confetti {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  background-color: var(--color);
+  opacity: 0;
+  transform: translateY(0) rotate(0);
+  pointer-events: none;
+  animation: confetti 3s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes confetti {
+  0% {
+    opacity: 1;
+    transform: translateY(0) rotate(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(100vh) rotate(720deg);
   }
 }
