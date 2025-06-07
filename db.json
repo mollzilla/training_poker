@@ -1,5 +1,85 @@
 {
-  "rooms": [],
-  "users": [],
-  "votes": []
+  "rooms": [
+    {
+      "id": "91cd",
+      "name": "Test Room",
+      "createdBy": "Test User",
+      "showVotes": false,
+      "roundNumber": 1,
+      "winners": [],
+      "currentWinners": [],
+      "currentQuestion": {
+        "id": "7smlp1x3g561teiv850ben",
+        "text": "Test Question",
+        "timestamp": 1749324872000
+      }
+    },
+    {
+      "id": "183af383-e4ae-4b23-b577-be15bc1227cf",
+      "name": "123",
+      "createdBy": "mila",
+      "showVotes": true,
+      "roundNumber": 2,
+      "winners": [
+        {
+          "userId": "c07310bb-d937-4924-8fd1-36c0972e0d78",
+          "wins": 2
+        }
+      ],
+      "currentWinners": [
+        "c07310bb-d937-4924-8fd1-36c0972e0d78"
+      ],
+      "currentQuestion": {
+        "id": "9319c0a6-d95e-43c4-b317-299ed66de114",
+        "text": "que verdura es el perro del oriente",
+        "timestamp": 1749325009693
+      }
+    }
+  ],
+  "users": [
+    {
+      "id": "2d82",
+      "name": "Test User",
+      "roomId": "91cd",
+      "role": "croupier"
+    },
+    {
+      "id": "865b83d5-c505-4e40-b8b2-927d914bd9f8",
+      "name": "mila",
+      "roomId": "183af383-e4ae-4b23-b577-be15bc1227cf",
+      "role": "croupier"
+    },
+    {
+      "id": "c07310bb-d937-4924-8fd1-36c0972e0d78",
+      "name": "angel",
+      "roomId": "183af383-e4ae-4b23-b577-be15bc1227cf",
+      "role": "player"
+    }
+  ],
+  "votes": [
+    {
+      "id": "9170",
+      "userId": "2d82",
+      "roomId": "91cd",
+      "questionId": "7smlp1x3g561teiv850ben",
+      "answer": "Test Answer",
+      "timestamp": 1749324885000
+    },
+    {
+      "id": "97cb6da8-d161-402b-a90d-d7980c4b9cc1",
+      "userId": "c07310bb-d937-4924-8fd1-36c0972e0d78",
+      "roomId": "183af383-e4ae-4b23-b577-be15bc1227cf",
+      "questionId": "d47a27bb-0f22-458c-8df2-d6fde0cf6dfc",
+      "answer": "plancha",
+      "timestamp": 1749324968941
+    },
+    {
+      "id": "83522c82-aa49-4fbc-af71-59737d405bfd",
+      "userId": "c07310bb-d937-4924-8fd1-36c0972e0d78",
+      "roomId": "183af383-e4ae-4b23-b577-be15bc1227cf",
+      "questionId": "9319c0a6-d95e-43c4-b317-299ed66de114",
+      "answer": "achicorio",
+      "timestamp": 1749325022352
+    }
+  ]
 }

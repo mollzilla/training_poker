@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { API_BASE_URL } from './config'
+import { generateUUID } from './utils/uuid'
 import {
   useCreateRoomMutation,
   useJoinRoomMutation,
@@ -147,6 +148,7 @@ function App() {
           showVotes: false,
           roundNumber: 1,
           winners: [],
+          currentWinners: [],
           currentQuestion: null,
         }).unwrap()
 
@@ -187,7 +189,7 @@ function App() {
           await updateRoom({
             ...room,
             currentQuestion: {
-              id: crypto.randomUUID(),
+              id: generateUUID(),
               text: currentQuestion.trim(),
               timestamp: Date.now()
             }

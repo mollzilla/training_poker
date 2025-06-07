@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { API_BASE_URL } from '../config';
+import { generateUUID } from '../utils/uuid';
 
 export interface Room {
   id: string;
@@ -120,7 +121,7 @@ export const api = createApi({
       query: (room) => ({
         url: 'rooms',
         method: 'POST',
-        body: { ...room, id: crypto.randomUUID() }
+        body: { ...room, id: generateUUID() }
       }),
       invalidatesTags: [{ type: 'Room', id: 'LIST' }]
     }),
@@ -149,7 +150,7 @@ export const api = createApi({
       query: (user) => ({
         url: 'users',
         method: 'POST',
-        body: { ...user, id: crypto.randomUUID() }
+        body: { ...user, id: generateUUID() }
       }),
       invalidatesTags: [{ type: 'User', id: 'LIST' }]
     }),
@@ -173,7 +174,7 @@ export const api = createApi({
       query: (vote) => ({
         url: 'votes',
         method: 'POST',
-        body: { ...vote, id: crypto.randomUUID() }
+        body: { ...vote, id: generateUUID() }
       }),
       invalidatesTags: [{ type: 'Vote', id: 'LIST' }]
     }),
