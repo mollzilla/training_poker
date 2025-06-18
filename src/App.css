@@ -74,7 +74,7 @@ h1 {
 /* Container styles */
 .container {
   width: 100%;
-  max-width: 1000px;
+  max-width: 1400px;
   margin: 0 auto;
   position: relative;
 }
@@ -130,6 +130,21 @@ h1 {
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1.5rem;
   margin: 2rem 0;
+}
+
+@media (min-width: 1200px) {
+  .users-list {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    padding: 0 1rem;
+    box-sizing: border-box;
+  }
+  
+  .user-item {
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+  }
 }
 
 /* User item styles */
@@ -311,8 +326,8 @@ h1 {
 
 /* Base styles for all indicator lights */
 .indicator-light {
-  width: 12px;
-  height: 12px;
+  width: 14.4px;  /* 20% larger than original 12px */
+  height: 14.4px; /* 20% larger than original 12px */
   border-radius: 50%;
   transition: all 0.3s ease;
   position: relative;
@@ -1155,7 +1170,7 @@ h1 {
 
 .current-question h2 {
   font-family: 'Righteous', cursive;
-  font-size: 2rem;
+  font-size: 2.6rem;
   color: var(--primary);
   margin: 0;
   text-align: center;
@@ -1163,6 +1178,7 @@ h1 {
     2px 2px 0px rgba(255, 153, 48, 0.3),
     -1px -1px 0px rgba(66, 149, 245, 0.3);
   line-height: 1.4;
+  margin-top: 1rem;
 }
 
 .round-indicator {
@@ -1538,5 +1554,42 @@ h1 {
   100% {
     opacity: 0;
     transform: translateY(100vh) rotate(720deg);
+  }
+}
+
+.neon-sign {
+  font-family: 'Brush Script MT', cursive;
+  font-size: 2rem;
+  padding: 1rem 2rem;
+  text-align: center;
+  border-radius: 8px;
+  margin: 1rem 0;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.neon-sign.dim {
+  color: #ff8585;
+  text-shadow: 0 0 5px #ff8585,
+               0 0 10px #ff8585,
+               0 0 20px #ff8585;
+}
+
+.neon-sign.bright {
+  color: #ff0000;
+  text-shadow: 0 0 5px #ff0000,
+               0 0 10px #ff0000,
+               0 0 20px #ff0000,
+               0 0 40px #ff0000,
+               0 0 80px #ff0000;
+  animation: neon-pulse 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes neon-pulse {
+  from {
+    filter: brightness(100%);
+  }
+  to {
+    filter: brightness(150%);
   }
 }

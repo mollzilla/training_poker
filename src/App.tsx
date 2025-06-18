@@ -121,17 +121,18 @@ function App() {
 
         if (!isMounted) return;
 
-        // Check for existing users with this name (case-insensitive)
+        // Find any existing user with this name (active or not)
         const existingUser = roomUsers.find((u: any) => 
           u.roomId === roomToJoin.id && 
           u.name.toLowerCase() === userName.trim().toLowerCase()
         )
 
-        // Check if there's an active player with this name
+        // Check if there's an active player with this name who hasn't left
         const existingActiveUser = roomUsers.find((u: any) => 
           u.roomId === roomToJoin.id && 
           u.name.toLowerCase() === userName.trim().toLowerCase() &&
-          u.id !== existingUser?.id
+          !u.leftAt && // Only consider users who haven't left
+          u.id !== existingUser?.id // Don't block the user from rejoining with their own name
         )
 
         if (existingActiveUser) {
@@ -654,12 +655,12 @@ function App() {
 
         {room?.currentQuestion && (
           <div className="current-question">
-            <h2>{room.currentQuestion.text}</h2>
             {nonCroupierUsers.length > 0 && (
               <div className={`neon-sign ${allPlayersVoted ? 'bright' : 'dim'}`}>
                 {allPlayersVoted ? 'All Players Answered!' : 'Waiting for Answers...'}
               </div>
             )}
+            <h2>{room.currentQuestion.text}</h2>
           </div>
         )}
 
