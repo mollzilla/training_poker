@@ -15,6 +15,7 @@ import {
   useResetDatabaseMutation
 } from './store/store'
 import { MAX_ANSWER_LENGTH } from './store/api'
+import type { User } from './store/api'
 import './App.css'
 
 function App() {
@@ -101,48 +102,61 @@ function App() {
   }, [currentRoom])
 
   useEffect(() => {
+    let isMounted = true;
     const joinRoomByName = async () => {
-      if (roomsByName && roomsByName.length > 0 && userName && joiningRoomName) {
-        try {
-          const roomToJoin = roomsByName[0]
-          
-          // Check for existing users with this name (case-insensitive)
-          const existingUser = users.find(u => 
-            u.roomId === roomToJoin.id && 
-            u.name.toLowerCase() === userName.trim().toLowerCase()
-          )
-
-          // Check if there's an active player with this name
-          const existingActiveUser = users.find(u => 
-            u.roomId === roomToJoin.id && 
-            u.name.toLowerCase() === userName.trim().toLowerCase() &&
-            u.id !== existingUser?.id
-          )
-
-          if (existingActiveUser) {
-            setError('This name is already taken by an active player. Please choose another name.')
-            setJoiningRoomName(null)
-            return
-          }
-
-          const user = await joinRoom({
-            id: existingUser?.id, // Reuse existing user ID if found
-            name: userName.trim(),
-            roomId: roomToJoin.id,
-            role: 'player'
-          }).unwrap()
-
-          setCurrentRoom(roomToJoin.id)
-          setCurrentUser(user.id)
-          setRoomName('')
-          setJoiningRoomName(null)
-        } catch (err) {
-          setError('Failed to join room. Please try again.')
-          console.error('Join room error:', err)
+      if (!roomsByName?.length || !userName || !joiningRoomName) {
+        if (joiningRoomName) {
+          setError('Room not found. Please check the room name and try again.')
           setJoiningRoomName(null)
         }
-      } else if (joiningRoomName) {
-        setError('Room not found. Please check the room name and try again.')
+        return
+      }
+
+      try {
+        const roomToJoin = roomsByName[0]
+        
+        // Get current users in the room directly from the server
+        const response = await fetch(`${API_BASE_URL}/users?roomId=${roomToJoin.id}`)
+        const roomUsers = await response.json()
+
+        if (!isMounted) return;
+
+        // Check for existing users with this name (case-insensitive)
+        const existingUser = roomUsers.find((u: any) => 
+          u.roomId === roomToJoin.id && 
+          u.name.toLowerCase() === userName.trim().toLowerCase()
+        )
+
+        // Check if there's an active player with this name
+        const existingActiveUser = roomUsers.find((u: any) => 
+          u.roomId === roomToJoin.id && 
+          u.name.toLowerCase() === userName.trim().toLowerCase() &&
+          u.id !== existingUser?.id
+        )
+
+        if (existingActiveUser) {
+          setError('This name is already taken by an active player. Please choose another name.')
+          setJoiningRoomName(null)
+          return
+        }
+
+        const user = await joinRoom({
+          id: existingUser?.id, // Reuse existing user ID if found
+          name: userName.trim(),
+          roomId: roomToJoin.id,
+          role: 'player'
+        }).unwrap()
+
+        if (!isMounted) return;
+
+        setCurrentRoom(roomToJoin.id)
+        setCurrentUser(user.id)
+        setRoomName('')
+        setJoiningRoomName(null)
+      } catch (err) {
+        if (!isMounted) return;
+        setError('Failed to join room. Please try again.')
+        console.error('Join room error:', err)
         setJoiningRoomName(null)
       }
     }
@@ -150,7 +164,11 @@ function App() {
     if (joiningRoomName) {
       joinRoomByName()
     }
-  }, [roomsByName, userName, joiningRoomName, joinRoom, users])
+
+    return () => {
+      isMounted = false;
+    }
+  }, [roomsByName, userName, joiningRoomName, joinRoom])
 
   const handleCreateRoom = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -503,6 +521,7 @@ function App() {
         return v.questionId === room.currentQuestion?.id && voter?.role === 'player'
       })
     : []
+  const allPlayersVoted = nonCroupierUsers.length > 0 && currentQuestionVotes.length === nonCroupierUsers.length
   const isLoading = isLoadingRoom || isLoadingUsers || isLoadingVotes
 
   if (room?.showVictoryCelebration) {
@@ -636,6 +655,11 @@ function App() {
         {room?.currentQuestion && (
           <div className="current-question">
             <h2>{room.currentQuestion.text}</h2>
+            {nonCroupierUsers.length > 0 && (
+              <div className={`neon-sign ${allPlayersVoted ? 'bright' : 'dim'}`}>
+                {allPlayersVoted ? 'All Players Answered!' : 'Waiting for Answers...'}
+              </div>
+            )}
           </div>
         )}
 

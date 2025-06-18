@@ -155,6 +155,10 @@ export const api = createApi({
         { type: 'User', id: 'LIST' }
       ]
     }),
+    getRoomUsers: builder.query<User[], string>({
+      query: (roomId) => `users?roomId=${roomId}`,
+      providesTags: ['User']
+    }),
     joinRoom: builder.mutation<User, CreateUserRequest>({
       query: (user) => ({
         url: 'users',
