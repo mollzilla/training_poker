@@ -105,7 +105,28 @@ function App() {
       if (roomsByName && roomsByName.length > 0 && userName && joiningRoomName) {
         try {
           const roomToJoin = roomsByName[0]
+          
+          // Check for existing users with this name (case-insensitive)
+          const existingUser = users.find(u => 
+            u.roomId === roomToJoin.id && 
+            u.name.toLowerCase() === userName.trim().toLowerCase()
+          )
+
+          // Check if there's an active player with this name
+          const existingActiveUser = users.find(u => 
+            u.roomId === roomToJoin.id && 
+            u.name.toLowerCase() === userName.trim().toLowerCase() &&
+            u.id !== existingUser?.id
+          )
+
+          if (existingActiveUser) {
+            setError('This name is already taken by an active player. Please choose another name.')
+            setJoiningRoomName(null)
+            return
+          }
+
           const user = await joinRoom({
+            id: existingUser?.id, // Reuse existing user ID if found
             name: userName.trim(),
             roomId: roomToJoin.id,
             role: 'player'
@@ -129,7 +150,7 @@ function App() {
     if (joiningRoomName) {
       joinRoomByName()
     }
-  }, [roomsByName, userName, joiningRoomName, joinRoom])
+  }, [roomsByName, userName, joiningRoomName, joinRoom, users])
 
   const handleCreateRoom = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -137,6 +158,22 @@ function App() {
     
     if (userName.trim() && roomName.trim()) {
       if (existingRooms && existingRooms.length > 0) {
+        // Check if this user was the croupier
+        const room = existingRooms[0]
+        const existingUser = users.find(u => 
+          u.roomId === room.id && 
+          u.role === 'croupier' && 
+          u.name.toLowerCase() === userName.trim().toLowerCase()
+        )
+
+        if (existingUser) {
+          // Allow croupier to rejoin their room
+          setCurrentRoom(room.id)
+          setCurrentUser(existingUser.id)
+          setRoomName('')
+          return
+        }
+
         setError('A room with this name already exists. Please choose another name.')
         return
       }
@@ -364,6 +401,7 @@ function App() {
 
   const adminPanel = (
     <>
+      {/* Admin login temporarily disabled
       {!isAdmin && !showAdminLogin && (
         <button 
           onClick={() => setShowAdminLogin(true)}
@@ -372,6 +410,7 @@ function App() {
           Log in as admin
         </button>
       )}
+      */}
 
       {showAdminLogin && !isAdmin && (
         <div className="admin-login-panel">
@@ -464,7 +503,6 @@ function App() {
         return v.questionId === room.currentQuestion?.id && voter?.role === 'player'
       })
     : []
-  const allVoted = nonCroupierUsers.length > 0 && currentQuestionVotes.length >= nonCroupierUsers.length
   const isLoading = isLoadingRoom || isLoadingUsers || isLoadingVotes
 
   if (room?.showVictoryCelebration) {
@@ -698,7 +736,7 @@ function App() {
                 <button 
                   onClick={handleReveal} 
                   className="reveal-button"
-                  disabled={!allVoted || isUpdatingRoom}
+                  disabled={currentQuestionVotes.length === 0 || isUpdatingRoom}
                 >
                   Reveal Answers
                 </button>

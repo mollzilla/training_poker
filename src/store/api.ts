@@ -29,6 +29,13 @@ export interface User {
   role: 'croupier' | 'player';
 }
 
+export interface CreateUserRequest {
+  id?: string; // Optional ID for rejoining
+  name: string;
+  roomId: string;
+  role: 'croupier' | 'player';
+}
+
 export interface Vote {
   id: string;
   userId: string;
@@ -148,11 +155,11 @@ export const api = createApi({
         { type: 'User', id: 'LIST' }
       ]
     }),
-    joinRoom: builder.mutation<User, Omit<User, 'id'>>({
+    joinRoom: builder.mutation<User, CreateUserRequest>({
       query: (user) => ({
         url: 'users',
         method: 'POST',
-        body: { ...user, id: generateUUID() }
+        body: { ...user, id: user.id || generateUUID() }
       }),
       invalidatesTags: [{ type: 'User', id: 'LIST' }]
     }),
