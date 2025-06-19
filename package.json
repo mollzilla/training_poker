@@ -5,15 +5,17 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "server": "json-server --watch db.json",
+    "server": "json-server --watch db.json --host 0.0.0.0 --port 3001 & node proxy-server.cjs",
     "dev:all": "npm run server & npm run dev",
-    "dev:host": "json-server db.json --watch --host 0.0.0.0 --port 3000 & vite --host",
+    "dev:host": "json-server db.json --watch --host 0.0.0.0 --port 3001 & node proxy-server.cjs & vite --host",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.8.2",
+    "express": "^5.1.0",
+    "http-proxy-middleware": "^3.0.5",
     "json-server": "^1.0.0-beta.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
